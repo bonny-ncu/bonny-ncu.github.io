@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CH6_17_send.html</title>
+    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&display=swap">
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+        }
+    </style>
+</head>
+<body>
+    <button class="Button_set" type="button" onclick="loadDoc()">Show the content</button>
+    <h2 class="header">匯率計算器</h2>
+    <hr>
+    <div>
+        <label for="twd_Amount">輸入台幣金額：</label>
+        <input type="number" id="twd_Amount" min="0">
+        <button id="calculate">計算</button>
+        <button id="reset" onclick="resetAmount()">重新開始</button>
+    </div>
+    
+    <div>
+        <h2 class="header">計算結果：</h2>
+        <hr>
+        <table id="rateTable">
+            <tr>
+                <td>美元</td>
+                <td id="USD"></td>
+            </tr>
+            <tr>
+                <td>歐元</td>
+                <td id="EUR"></td>
+            </tr>
+            <tr>
+                <td>日圓</td>
+                <td id="JPY"></td>
+            </tr>
+            <tr>
+                <td>韓元</td>
+                <td id="KRW"></td>
+            </tr>
+            <tr>
+                <td>澳幣</td>
+                <td id="AUD"></td>
+            </tr>
+            
+        </table>
+    </div>
+
+    <script>
+    function loadDoc() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            displayRateTable(this);
+        }
+        xhttp.open("GET", "rate.xml");
+        xhttp.send();
+    }
+
+
+    function displayRateTable(xml) {
+        const xmlDoc = xml.responseXML;
+        const currencyNodes = xmlDoc.getElementsByTagName("currency");
+        let table = "<tr><th>幣別</th><th>現金</th></tr>";
+
+        for (let i = 0; i < currencyNodes.length; i++) {
+            const currencyName = currencyNodes[i].getElementsByTagName("cur_name")[0].textContent;
+            const currencyAmount = currencyNodes[i].getElementsByTagName("cur_amount")[0].textContent;
+
+            table += "<tr><td>" + currencyName + "</td><td>" + currencyAmount + "</td></tr>";
+
+            // 將匯率數值存儲到對應的HTML元素中
+            document.getElementById(currencyName).textContent = currencyAmount;
+        }
+
+        document.getElementById("rateTable").innerHTML = table;
+    }
+
+
+    function resetAmount() {
+    // 清空輸入的台幣金額
+    document.getElementById("twd_Amount").value = "";
+
+    // 清空計算結果的HTML元素
+    document.getElementById("USD").textContent = "";
+    document.getElementById("EUR").textContent = "";
+    document.getElementById("JPY").textContent = "";
+    document.getElementById("KRW").textContent = "";
+    document.getElementById("AUD").textContent = "";
+}
+
+
+function calculateAmount() {
+    // 獲取輸入的台幣金額
+    const twdAmount = parseFloat(document.getElementById("twd_Amount").value);
+
+    // 檢查輸入的台幣金額是否有效
+    if (isNaN(twdAmount) || twdAmount <= 0) {
+        window.alert("請輸入有效數值");
+        return;
+    }
+
+    // 計算其他幣別的金額
+    const usdAmount = twdAmount / parseFloat(document.getElementById("USD").textContent);
+    const eurAmount = twdAmount / parseFloat(document.getElementById("EUR").textContent);
+    const jpyAmount = twdAmount / parseFloat(document.getElementById("JPY").textContent);
+    const krwAmount = twdAmount / parseFloat(document.getElementById("KRW").textContent);
+    const audAmount = twdAmount / parseFloat(document.getElementById("AUD").textContent);
+
+    // 更新結果的 HTML 元素
+    document.getElementById("USD").textContent = usdAmount.toFixed(2);
+    document.getElementById("EUR").textContent = eurAmount.toFixed(2);
+    document.getElementById("JPY").textContent = jpyAmount.toFixed(2);
+    document.getElementById("KRW").textContent = krwAmount.toFixed(2);
+    document.getElementById("AUD").textContent = audAmount.toFixed(2);
+}
+
+document.getElementById("calculate").addEventListener("click", calculateAmount);   
+
+        
+    </script>
+
+
+  
+</body>
+</html>
