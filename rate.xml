@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rates_table>
+  <currency>
+    <cur_name>USD</cur_name>
+    <cur_amount>30.955</cur_amount>
+  </currency>
+  <currency>
+    <cur_name>AUD</cur_name>
+    <cur_amount>20.44</cur_amount>
+  </currency>
+  <currency>
+    <cur_name>JPY</cur_name>
+    <cur_amount>0.2219</cur_amount>
+  </currency>
+  <currency>
+    <cur_name>EUR</cur_name>
+    <cur_amount>33.45</cur_amount>
+  </currency>
+  <currency>
+    <cur_name>KRW</cur_name>
+    <cur_amount>0.02533</cur_amount>
+  </currency>
+</rates_table>
+
